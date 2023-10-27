@@ -1,0 +1,520 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>『论文笔记』语言模型的全面评估 | 豆本豆's Blog</title><meta name="author" content="豆本豆"><meta name="copyright" content="豆本豆"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="123456789英文名: Holistic Evaluation of Language Models中文名：语言模型的整体评估作者：Percy Liang....发布平台：xx发表时间：2022年创建时间：2023年08月11日create_author：zhangqf下载链接：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2211.09110实验结果地址：https:&#x2F;&#x2F;crfm.stanf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="『论文笔记』语言模型的全面评估">
+<meta property="og:url" content="http://example.com/posts/1085628429/index.html">
+<meta property="og:site_name" content="豆本豆&#39;s Blog">
+<meta property="og:description" content="123456789英文名: Holistic Evaluation of Language Models中文名：语言模型的整体评估作者：Percy Liang....发布平台：xx发表时间：2022年创建时间：2023年08月11日create_author：zhangqf下载链接：https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;2211.09110实验结果地址：https:&#x2F;&#x2F;crfm.stanf">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/nav2.jpg">
+<meta property="article:published_time" content="2023-08-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2023-10-27T05:56:02.956Z">
+<meta property="article:author" content="豆本豆">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/nav2.jpg"><link rel="shortcut icon" href="/img/nav2.jpg"><link rel="canonical" href="http://example.com/posts/1085628429/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="baidu-site-verification" content="codeva-XDbgaIn1kE"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?bbff1573100ce574607cf43eb22deba8";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 豆本豆","link":"链接: ","source":"来源: 豆本豆's Blog","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: flase,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '『论文笔记』语言模型的全面评估',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-10-27 13:56:02'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/nav2.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="豆本豆's Blog"><span class="site-name">豆本豆's Blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" rel="external nofollow noreferrer"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">『论文笔记』语言模型的全面评估</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-08-10T16:00:00.000Z" title="发表于 2023-08-11 00:00:00">2023-08-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-10-27T05:56:02.956Z" title="更新于 2023-10-27 13:56:02">2023-10-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/paper-reading/">paper reading</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="『论文笔记』语言模型的全面评估"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><meta name="referrer" content="no-referrer" />
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">英文名: Holistic Evaluation of Language Models</span><br><span class="line">中文名：语言模型的整体评估</span><br><span class="line">作者：Percy Liang....</span><br><span class="line">发布平台：xx</span><br><span class="line">发表时间：2022年</span><br><span class="line">创建时间：2023年08月11日</span><br><span class="line">create_author：zhangqf</span><br><span class="line">下载链接：https://arxiv.org/abs/2211.09110</span><br><span class="line">实验结果地址：https://crfm.stanford.edu/helm/v1.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="作者"><a href="#作者" class="headerlink" title="作者"></a>作者</h3><p><img src="https://gitee.com/doubendou-z/Blog-imgs/raw/master/img/202310260956238.png" alt="Pasted image 20230811160825"></p>
+<ul>
+<li>作者都来自斯坦福</li>
+<li>一作作者为斯坦福副教授，且研究领域为QA</li>
+<li>斯坦福还成立了一个关于foundation模型的研究机构：CRFM</li>
+</ul>
+<h3 id="导言：语言模型"><a href="#导言：语言模型" class="headerlink" title="导言：语言模型"></a>导言：语言模型</h3><p><img src="https://gitee.com/doubendou-z/Blog-imgs/raw/master/img/202310260956239.png" alt="Pasted image 20230811160205"></p>
+<p>在导言中首先介绍了什么是语言模型，语言模型就是给定一些文字，然后补全剩下的内容，对于输入到语言模型中的文字称为prompt，promat如何设计既能反映任务，又能让语言模型理解，语言模型输出的文字就是语言模型生成的答案。</p>
+<p>因为文章是评测类型工作，所以说的不是如何训练一个语言模型，而是直接在不同数据集上使用了开源、非开源（小道借用）、或者是使用API去调用的模型。作者也在这部分内容里讲了他覆盖的应用场景达到了96%，之前的工作仅覆盖17.6%。此外，作者还在这篇文章中对数据集进行了总结归纳，以便能了解自己在评估数据集的时候覆盖面是什么样的（场景分类）</p>
+<h3 id="核心的应用场景"><a href="#核心的应用场景" class="headerlink" title="核心的应用场景"></a>核心的应用场景</h3><p>语言模型现在是语言技术的基石，但是它的<strong>能力</strong>、<strong>局限性</strong>和<strong>风险</strong>并没有被完全理解。</p>
+<p>任何文本的应用场景分为以下三块：</p>
+<p>1、任务 (<strong>task</strong>)</p>
+<p>例如问答、摘要、情感分析、信息检索等。</p>
+<p>2、领域 (<strong>domain</strong>)，细分为以下三个因素：</p>
+<p><strong>What</strong>，文本来自什么领域，例如维基百科、电影评论、新闻、社交媒体等。</p>
+<p><strong>Who</strong>，用户来自什么领域，例如网络用户、性别、种族、年龄等。</p>
+<p><strong>When</strong>，文本生成的时间。</p>
+<p>3、语言 (<strong>language</strong>)</p>
+<p>文本的使用语言。</p>
+<p>场景主要&#x3D;&#x3D;来自于各种会议论文中的分类标签&#x3D;&#x3D;，由于发展速度非常快，很难包含最新的任务。以下是从中选取的&#x3D;&#x3D;核心场景&#x3D;&#x3D;：</p>
+<p>1、问答(Question answering)</p>
+<p><strong>输入</strong>：一个问题，分为开放性问题（问答题）和封闭式问题（选择题）</p>
+<p><strong>输出</strong>：模型给出回答</p>
+<p><strong>数据集</strong>：NaturalQuestions，用户在Google搜索的问题，并且能在Wikipedia找到答案</p>
+<p>Narrative QA，给一段来自书籍或电影的故事然后进行提问（阅读理解）</p>
+<p>QuAC，自由问答，更加开放，并依赖于上下文</p>
+<p>HellaSwag，测试常识推理</p>
+<p>OpenBookQA，基础科学题（中小学试题）</p>
+<p>TruthfulQA，来自GPT3回答错误的问题，测试模型的真实性</p>
+<p>MMLU，学科知识（大学各专业试题）</p>
+<p>BoolQ，是非题</p>
+<p>2、信息检索(Information retrieval)</p>
+<p>给出查询 q 和文本集 C，在 C 中返回最相关的 K 段话，并按照相关性排序。</p>
+<p><strong>输入</strong>：将查询文本 q 和文本集 C 中的一个段落 ci 送入语言模型</p>
+<p><strong>输出</strong>：模型判断段落 ci 中是否存在查询 q 的答案，根据模型对 yes 的预测概率进行排序</p>
+<p><strong>数据集</strong>：MS MARCO，问题 + 多个已标注相关性排序的回答。</p>
+<p>3、摘要(Summarization)</p>
+<p>评估模型的抽象概括能力，而不是抽取文本能力</p>
+<p><strong>输入</strong>：一段文档</p>
+<p><strong>输出</strong>：摘要</p>
+<p><strong>数据集</strong>：CNN，美国有线电视新闻网</p>
+<p>DailyMail，每日邮报</p>
+<p>XSUM，从CNN的文章中根据html标签找一个很简短的概括</p>
+<p>4、情感分析 <strong>(Sentiment analysis)</strong></p>
+<p><strong>输入</strong>：一段评价，例如影评</p>
+<p><strong>输出</strong>：判断是积极还是消极</p>
+<p><strong>数据集</strong>：IMDB，互联网电影数据集</p>
+<p>5、毒性检测 (Toxicity detection)</p>
+<p><strong>输入</strong>：一段话</p>
+<p><strong>输出</strong>：判断是否有毒</p>
+<p><strong>数据集</strong>：CivilComments，用户对新闻的留言，并给出数值在 0 到 1 之间的有毒性标注</p>
+<p>6、杂项文本分类 (Miscellaneous text classification)</p>
+<p><strong>输入</strong>：一段文本</p>
+<p><strong>输出</strong>：分类标签，这里的标签是多种多样的。</p>
+<p><strong>数据集</strong>：RAFT，多种文本分类标签</p>
+<h3 id="评估指标"><a href="#评估指标" class="headerlink" title="评估指标"></a>评估指标</h3><p>评估时优先考虑<strong>可扩展性</strong>，采用基于扰动（perturbation-based）的方法。评估应该与特定的场景无关，例如评估公平性时，不一定能知道文本数据是来自什么种族、性别，因此将性别这种词换掉后再去评估公平性。</p>
+<p>经过筛选后产生了以下 7 种指标：</p>
+<p>1、精度(Accuracy)</p>
+<p>不同场景有不同的精度评判指标。</p>
+<p>1.1一般情况</p>
+<p><strong>Exect match</strong>，精确匹配，需要和标准答案完全一样，例如选择题、是非题和一些简单的问答题。</p>
+<p><strong>Quasi-exect match</strong>，准精确匹配，允许和标准答案有一些变换，例如进行大小写变换后能够精确匹配。</p>
+<p><strong>F1-Score</strong>，精确率和召回率的调和平均数。</p>
+<p>例如：将模型输出和标准答案都进行分词转换为两个字符串数组：</p>
+<p>标准答案：[‘练习’, ‘时长’, ‘两年半’, ‘的’, ‘练习生’]</p>
+<p>模型输出：[‘练习生’, ‘练习’, ‘两年半’, ‘了’]</p>
+<p>判断两个数组的每个词是否在另一个数组中存在，就可以得到：</p>
+<p>真阳性(TP)：模型输出并且在标准答案中的词语数量。这里是3个：练习生、练习、两年半。</p>
+<p>假阳性(FP)：模型输出但不在标准答案中的词语数量。这里是1个：了。</p>
+<p>假阴性(FN)：模型未输出并且在标准答案中的词语数量。这里是2个：时长、的。</p>
+<p>然后计算精确率和召回率：</p>
+<p>精确率(Precision)：TP &#x2F; (TP + FP)&#x3D;0.75</p>
+<p>召回率(Recall)：TP &#x2F; (TP + FN)&#x3D;0.6</p>
+<p>最后就可以计算F-Score了：</p>
+<p><img src="https://gitee.com/doubendou-z/Blog-imgs/raw/master/img/202310260956240.png" alt="Pasted image 20231026095028|300"></p>
+<p>当β&#x3D;1时就是F1-Score：</p>
+<p>F1-Score&#x3D; 2 * (Precision * Recall) &#x2F; (Precision + Recall) &#x3D; 2*(0.75*0.6)&#x2F;(0.75+0.6) &#x3D; 2&#x2F;3</p>
+<p>1.2 信息检索</p>
+<p><strong>RR@K</strong>，取决于最相关文档的排序 (rank) 的倒数 (reciprocal)</p>
+<p><img src="https://gitee.com/doubendou-z/Blog-imgs/raw/master/img/202310260956241.png" alt="Pasted image 20231026095103|300"></p>
+<p>例如：最相关的文档（排序应该是1），模型给出的排序是rank，如果rank小于等于指定的K，得分为1&#x2F;rank，即模型给出越接近真实排序1则得分会越高。如果rank大于K，则得分为0。</p>
+<p><strong>NDCG@K</strong>，Normalized Discounted Cumulative Gain， 归一化折损累计增益。</p>
+<p><img src="https://gitee.com/doubendou-z/Blog-imgs/raw/master/img/202310260956242.png" alt="Pasted image 20231026095130|300"></p>
+<p>例如：每次给出模型排名最前的K个文档，di表示排序在第i位的文档，对每个di根据排序给出一个分数graded_relevance(di)，然后把这K个分数相加，就得到CG分(Cumulative Gain)。</p>
+<p>接下来根据排序进行折扣(Discounted)，也就是除以log(i+1)，得到DCG，这里i越小则会除以较小的值，也就是说排在前面的分数能够越高越好。</p>
+<p>最后再加一个Normalize，按照真实排序得到文档的分数并计算DCG，就会得到一个分数的上限，将DCG分数除以这个上限分数就会得到小于等于1的NDCG分数，NDCG分数越接近1，表示与最优排序越接近。</p>
+<p>1.3 摘要</p>
+<p><strong>ROUGE-2</strong>，Recall-Oriented Understudy for Gisting Evaluation，通过词的重叠进行评估。</p>
+<p>例如：假设标准答案摘要是”今天天气真好”，模型输出是”今天好天气”，ROUGE-2则是将每2个连续的字取出形成集合：</p>
+<p>标准答案：[‘今天’, ‘天天’, ‘天气’, ‘气真’, ‘真好’]</p>
+<p>模型输出：[‘今天’, ‘天好’, ‘好天’, ‘天气’]</p>
+<p>这里标准答案共5个词，模型输出包含了其中2个词，那么ROUGE-2分数就是0.4。</p>
+<p>1.4 语言</p>
+<p><strong>BPB</strong>，Bilingual Evaluation Understudy，一般是用来评估两种语言之间的机器翻译效果，通过计算每一个翻译结果的单词与真实翻译的单词的匹配情况，然后对匹配的单词数量与翻译结果总单词数进行比较，计算出百分比作为BPB分数。</p>
+<p>1.5 推理</p>
+<p>**F1 (set match)**，F1分数</p>
+<p>**Exact match (up to specified indicator)**，精确匹配（到指定目标）</p>
+<p><strong>Code</strong>，代码评估是测试通过单元测试的个数</p>
+<p><strong>Equivalent</strong>，等价，评估结果在数学上是否等价</p>
+<p>**Equivalent (chain-of-thought)**，等价（思维链）</p>
+<p>2、校准和不确定性 (Calibration and uncertainty)</p>
+<p>校准和模型的不确定性表达对于系统在高风险环境下的部署尤为关键。例如：筛选简历时，一个简历在通过和不通过附近，通过概率是50%，此时需要人为干预更合适一些，以避免潜在的错误。</p>
+<p>模型被校准过的意思是，它预测出来的概率是有意义的。例如：模型对有毒性进行分类，1000个句子的输出都是0.7，那么就应该意味着这1000个句子有70%是有毒的，0.7是真实反映了概率。</p>
+<p><strong>期望校准误差</strong>**(ECE<strong><strong>，</strong></strong>Expected Calibration Error)**，将模型预测结果分为若干个组（bins），统计每个组的准确率Accuracy和预测概率的平均值Prob的差距bin error，将每个bin的bin error作为权重乘以每个bin对应的大小，得到ECE。例如：</p>
+<p><img src="https://gitee.com/doubendou-z/Blog-imgs/raw/master/img/202310260956243.png" alt="Pasted image 20230811160059"></p>
+<p><strong>选择性分类精度</strong>**(Selective classification accuracy)**<strong>，</strong>在模型预测的结果中选择预测值最大的百分之C个值，计算这些高置信度样本的分类精度。例如：</p>
+<p><img src="https://gitee.com/doubendou-z/Blog-imgs/raw/master/img/202310260956244.png" alt="Pasted image 20230811160042"><br>选择性分类精度中，更关心的是排序，即使原始的概率不对，但只要顺序是对的，那么这个精度也会比较高。</p>
+<p>3、稳健性 (Robustness)</p>
+<p>真实环境中，用户的输入是千奇百怪的，稳健性则是判断在模型的输入有变化时是否能够保持正确的输出。对输入的改变有以下两种：</p>
+<p><strong>invariance</strong>，较小的、保留语义的干扰。例如：大小写变化、常见的拼写错误。</p>
+<p><strong>equivariance</strong>，改变语义的干扰。例如：将IMDB中一条负面的评论修改几个词变为正面评论。</p>
+<p>4、公平性 (Fairness)</p>
+<p><strong>反事实的公平</strong>**(Counterfactual fairness)**，将文本中某些人的性别或者种族变换，评估模型的结果表现是否会不一样。例如：将一段话中的He全部转换为She。</p>
+<p><strong>性能的差距</strong>**(Performance disparities)**，评估不同社会群体中模型的精度区别。例如：早期人脸识别中对黑人的分辨率会低一些。</p>
+<p>5、偏见和刻板印象(Bias and stereotypes)</p>
+<p>评估模型生成的结果是否过多的偏向于某一些社会群体。</p>
+<p>1、会不会特意消除或过度的表示某一些社会群体。</p>
+<p>2、某些职业是否和某些群体有更强的关系。</p>
+<p>6、有毒性(Toxicity)</p>
+<p>在输入正常的情况下，模型也有可能会生成有毒的输出，会导致用户体验不好，甚至产生公关上的问题。</p>
+<p>评估方法：将模型的输出送入Perspective API看效果</p>
+<p>7、效率(Efficiency)</p>
+<p>7.1、训练效率</p>
+<p>考虑训练时消耗的能源和产生的碳排放，这个只是做一个简单的估算。</p>
+<p>消耗能源计算公式：GPU数量 * GPU的瓦数 * 训练时长 * PUE</p>
+<p>PUE： Power Usage Effectiveness，电源使用效率</p>
+<p>7.2、推理效率</p>
+<p>计算模型运行花费的时间，有两种衡量标准：</p>
+<p><strong>Denoised inference runtime</strong>，不能直接访问模型时，可以直接调用API，好处是方便，坏处是精度包含了整个系统的耗时。</p>
+<p><strong>Idealized inference runtime</strong>，可以直接访问模型时，可以在同一个GPU上测试不同的模型，更加公平。</p>
+<h3 id="对于一个语言模型需要评估哪些方面"><a href="#对于一个语言模型需要评估哪些方面" class="headerlink" title="对于一个语言模型需要评估哪些方面"></a>对于一个语言模型需要评估哪些方面</h3><p>对一个语音模型而言，应该从哪几个方面进行衡量，结合场景、任务、数据集进行评估。</p>
+<p>1、语言</p>
+<p>评估模型的建模能力，两个小任务：</p>
+<p>1）给出和训练集差不多的文本，让模型计算损失。</p>
+<p>2）给出一个句子，把其中一个token变换（这个变换是不可接受的），那么对于语言模型来说，应该给原始句子高概率，给变换后不可接受的句子低概率。例如：</p>
+<p>A、The cats annoy Tim. </p>
+<p>B、The cats annoys Tim.</p>
+<p>2、知识类</p>
+<p>问答和补全两种模式。</p>
+<p>例如：法国的首都是什么？</p>
+<p>法国的首都是_____</p>
+<p>3、推理</p>
+<p>数学推理</p>
+<p>代码分析</p>
+<p>法律推理，判断观点是由哪些证据支撑。</p>
+<p>逻辑推理，法律学校入学考试题。</p>
+<p>结构数据推理，例如：给两行数据，判断是不是指同一个物体。给一个缺失数据的表，对其进行补全。</p>
+<p>4、版权</p>
+<p>评估模型是否记住了有版权的数据。例如：从一些有版权的书中选一些句子送给语言模型，看输出是否是复制原文的。给出GPL协议的一些代码，看模型是否记住了这类协议代码的内容。</p>
+<p>5、虚假信息</p>
+<p>6、有毒性</p>
+<h3 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h3><p><img src="https://gitee.com/doubendou-z/Blog-imgs/raw/master/img/202310260956245.png" alt="Pasted image 20230811155915"></p>
+<h3 id="模型拓展任务"><a href="#模型拓展任务" class="headerlink" title="模型拓展任务"></a>模型拓展任务</h3><p>通过修改promt，加上5个样例，将语言模型拓展到需要评估的任务上去。</p>
+<p>例如：想让语言模型做一个多选题，则需要给出5个【问题+选项+答案】的组合，然后再给出【问题+选项】，让模型输出【答案】</p>
+<p><img src="https://gitee.com/doubendou-z/Blog-imgs/raw/master/img/202310260956246.png" alt="Pasted image 20230811155808"><br>语言模型、问答、摘要三个任务的promt设计比对：</p>
+<p><img src="https://gitee.com/doubendou-z/Blog-imgs/raw/master/img/202310260956247.png" alt="Pasted image 20230811155843"></p>
+<h3 id="实验和结果"><a href="#实验和结果" class="headerlink" title="实验和结果"></a>实验和结果</h3><p>（只展示其中一个）</p>
+<p>跟精度相比，不同模型上，其他评估指标的衡量能力表现：<br><img src="https://gitee.com/doubendou-z/Blog-imgs/raw/master/img/202310261002468.png" alt="Pasted image 20231026100136"><br>x轴代表精度，不同颜色代表不同任务，同一颜色代表不同的模型</p>
+<ul>
+<li>精度和校准错误率、偏差、有毒性、测试时间没有特别强的关系，和稳健性、公平性有很强关系。</li>
+</ul>
+<p><a target="_blank" rel="noopener external nofollow noreferrer" href="https://baijiahao.baidu.com/s?id=1761035535019606597&wfr=spider&for=pc">实验结果—博客</a></p>
+<p>大致所有的实验得出以下结论：</p>
+<ol>
+<li>InstructGPT在整体任务上表现最好</li>
+<li>现在开源模型和闭源的商业模型有一定差距<ul>
+<li>闭源模型通过用户访问API进行收费，因为闭源的商业模型效果会更好</li>
+</ul>
+</li>
+<li>在一个任务中，模型通常来说是越大越好<ul>
+<li>如果是模型之间作比较，如果想在某个领域内做的比较好的话，至少需要一个50B参数的模型。大的模型不管训练还是部署都会有问题。</li>
+</ul>
+</li>
+<li>在用语言模型做各种任务的时候，需要给一个prompt，但是所有的语言模型对提示的样式非常敏感。</li>
+</ol>
+<h3 id="贡献点"><a href="#贡献点" class="headerlink" title="贡献点"></a>贡献点</h3><p>&#x3D;&#x3D;<strong>作者说：</strong>&#x3D;&#x3D;</p>
+<ul>
+<li>将潜在的应用场景以及评估手段做了分类，并对其中一小部分做了详细的评测</li>
+<li>之前的文章主要是关于精度和有效性，对于其它相关评测不怎么关心，这个文章对每一个尺度都进行了评估</li>
+<li>评估了30个模型，市面上能找到的模型基本都找到了，然后在42个场景上做了评估，比较全面</li>
+<li>跟其他工作相比，覆盖面更广，其它工作可能只覆盖17.9%的场景，作者的文章覆盖了<strong>96%</strong></li>
+</ul>
+<p>&#x3D;&#x3D;<strong>可收获点：</strong>&#x3D;&#x3D;</p>
+<ul>
+<li>除精度外其它评估指标</li>
+<li>作者提供的评价语言模型的框架：如何评，评哪些方面</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://example.com">豆本豆</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/posts/1085628429/">http://example.com/posts/1085628429/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">豆本豆's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/nav2.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/posts/1301697693/" title="Vscode误删容器内文件，如何找回"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Vscode误删容器内文件，如何找回</div></div></a></div><div class="next-post pull-right"><a href="/posts/3648064065/" title="『论文笔记』DragGan：基于Gan的交互式图像处理方法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">『论文笔记』DragGan：基于Gan的交互式图像处理方法</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/nav2.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">豆本豆</div><div class="author-info__description">这里有一只怪味的糊涂豆呀~</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/Zhangqiaofeng-98"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%9C%E8%80%85"><span class="toc-number">1.</span> <span class="toc-text">作者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%BC%E8%A8%80%EF%BC%9A%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text">导言：语言模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">3.</span> <span class="toc-text">核心的应用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87"><span class="toc-number">4.</span> <span class="toc-text">评估指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E4%BA%8E%E4%B8%80%E4%B8%AA%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E9%9C%80%E8%A6%81%E8%AF%84%E4%BC%B0%E5%93%AA%E4%BA%9B%E6%96%B9%E9%9D%A2"><span class="toc-number">5.</span> <span class="toc-text">对于一个语言模型需要评估哪些方面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B"><span class="toc-number">6.</span> <span class="toc-text">模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%8B%93%E5%B1%95%E4%BB%BB%E5%8A%A1"><span class="toc-number">7.</span> <span class="toc-text">模型拓展任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E5%92%8C%E7%BB%93%E6%9E%9C"><span class="toc-number">8.</span> <span class="toc-text">实验和结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B4%A1%E7%8C%AE%E7%82%B9"><span class="toc-number">9.</span> <span class="toc-text">贡献点</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/612714326/" title="01_软件工程学概述">01_软件工程学概述</a><time datetime="2023-10-26T06:16:05.000Z" title="发表于 2023-10-26 14:16:05">2023-10-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/1151064059/" title="『obsidian』Mermaid绘图">『obsidian』Mermaid绘图</a><time datetime="2023-10-23T09:41:09.423Z" title="发表于 2023-10-23 17:41:09">2023-10-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/3109525838/" title="Git：Github分支和本地分支互通">Git：Github分支和本地分支互通</a><time datetime="2023-10-23T06:00:55.000Z" title="发表于 2023-10-23 14:00:55">2023-10-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/2232147246/" title="小破站毛胚房入住装修日记">小破站毛胚房入住装修日记</a><time datetime="2023-10-17T08:09:17.000Z" title="发表于 2023-10-17 16:09:17">2023-10-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/3742278586/" title="[项目学习]PyHealth-临床预测建模的深度学习工具箱">[项目学习]PyHealth-临床预测建模的深度学习工具箱</a><time datetime="2023-10-17T02:34:35.442Z" title="发表于 2023-10-17 10:34:35">2023-10-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 豆本豆</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener external nofollow noreferrer" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, Welcome to 豆本豆's <a target="_blank" rel="noopener external nofollow noreferrer" href="https://doubendou-z.cn/">Blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">简</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  btf.addModeChange('mermaid', runMermaid)
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
